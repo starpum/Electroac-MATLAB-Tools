@@ -123,13 +123,11 @@ Vas  = rho*c^2*Cas;
 %         box_type = 4;   %PR
 % end
 
-box_type_inquiry = menu('Select the system type','free air','closed box','vented box');
+box_type_inquiry = menu('Select the system type','closed box','vented box');
 switch box_type_inquiry
     case 1
-        box_type = 0;   %vented box 
-    case 2
         box_type = 2;   %vented box 
-    case 3
+    case 2
         box_type = 3;   %closed box
 end
 
@@ -184,18 +182,17 @@ if  box_type == 0    % Free air
          Bl/Mms, -1/(Mms*Cms), -Rms/Mms];
      
     B = [1/Le;0;0];
-    
 elseif box_type == 1    % Inf baffle
         % TODO
         
 elseif box_type == 2    % Closed box
     
-    A=[  - Re/Le,            0,   - Bl/Le,        0;
-               0,            0,         1,        0;
-          Bl/Mms, -1/(Mms*Cms), - Rms/Mms, - Sd/Mms;
-               0,            0,     Sd/Cb,        0];
+    A=[  - Re/Le, 0, - Bl/Le, 0;
+               0,           0,       1, 0;
+          Bl/Mms, -1/(Mms*Cms), - Rms/Mm, - Sd/Mm;
+ 0,0,Sd/Cb,0];
     
-    B=[ 1/Le; 0; 0 ;0];
+    B=[ 1/Le; 0; 0];
     
 elseif box_type == 3    % Vented box
     A=[ -Re/Le,            0,    -Bl/Le,       0,      0; 
@@ -236,7 +233,8 @@ pressure = reshape(pressure,1,length(pressure));
 ffti   = fft(current,N);
 fftQLS = fft(QLS,N);
 
-%-------  Radiated pressure 
+%       Radiated pressure 
+
 % Derivative
 a = 1;
 b = [1 -1]*Fsamp;
@@ -327,6 +325,7 @@ Lp = 20*log10(abs(fftprad(1:N/2)/2e-5));
 % 
 % dQLS = filter(b,a,QLSNL); % derivative dQLS/dt
 % 
+% rLS     = 0.05;
 % tauLS   = rLS/c;
 % NtauLS  = round(Fsamp*tauLS);
 % propaLS = zeros(1,NtauLS);
@@ -340,7 +339,7 @@ Lp = 20*log10(abs(fftprad(1:N/2)/2e-5));
 %% ------------------------------------------------------------------
 %       Figures 
 
-figure(1)       % Volume velocity
+figure(1)
     subplot(211)
 semilogx(f,20*log10(abs(fftQLS(1:N/2))))
 grid on
