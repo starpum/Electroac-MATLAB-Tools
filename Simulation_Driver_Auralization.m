@@ -180,8 +180,8 @@ end
 
 if  box_type == 0    % Free air
     A = [  -Re/Le,           0,     -Bl/Le;
-              0,           0,          1;
-         Bl/Mms, -1/(Mms*Cms), -Rms/Mms];
+              0,           0,            1;
+         Bl/Mms, -1/(Mms*Cms),   -Rms/Mms];
      
     B = [1/Le;0;0];
     
